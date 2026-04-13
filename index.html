@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RescueMesh AI — Disaster Response Platform</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ==================== LOGIN PAGE ==================== -->
+<div id="loginPage" class="page-screen active">
+  <div class="login-bg">
+    <div class="login-grid"></div>
+    <div class="login-particles" id="particles"></div>
+  </div>
+  <div class="login-container">
+    <div class="login-logo">
+      <div class="logo-pulse"></div>
+      <span class="shield-icon">🛡️</span>
+      <h1>RescueMesh <span>AI</span></h1>
+      <p>Disaster Response Intelligence Platform</p>
+      <div class="team-badge">TEAM TECH YANTRA · GOOGLE DEVELOPER HACKATHON 2024</div>
+    </div>
+    <div class="login-card">
+      <div class="login-tabs">
+        <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+        <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+      <!-- SIGN IN -->
+      <div id="signinForm" class="tab-content active">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="Enter your email" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPass" placeholder="Enter password" />
+          <span class="toggle-pass" onclick="togglePass('loginPass')"><i class="fas fa-eye"></i></span>
+        </div>
+        <div class="login-options">
+          <label><input type="checkbox"/> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button class="btn-primary full" onclick="doLogin()">
+          <i class="fas fa-shield-alt"></i> ENTER RESCUE NETWORK
+        </button>
+        <div class="divider"><span>OR</span></div>
+        <button class="btn-google" onclick="doLogin()">
+          <img src="https://www.google.com/favicon.ico" width="18"/> Continue with Google
+        </button>
+      </div>
+      <!-- SIGN UP -->
+      <div id="signupForm" class="tab-content">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Full Name" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Email Address" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-phone"></i>
+          <input type="tel" placeholder="Phone Number" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-map-marker-alt"></i>
+          <input type="text" placeholder="City / Location" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Create Password" />
+        </div>
+        <div class="role-select">
+          <p>Select Your Role:</p>
+          <div class="role-options">
+            <div class="role-card active" onclick="selectRole(this,'citizen')">
+              <i class="fas fa-user"></i><span>Citizen</span>
+            </div>
+            <div class="role-card" onclick="selectRole(this,'volunteer')">
+              <i class="fas fa-hands-helping"></i><span>Volunteer</span>
+            </div>
+            <div class="role-card" onclick="selectRole(this,'authority')">
+              <i class="fas fa-building"></i><span>Authority</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary full" onclick="doLogin()">
+          <i class="fas fa-rocket"></i> CREATE ACCOUNT
+        </button>
+      </div>
+    </div>
+    <p class="login-footer">⚡ Powered by AI · Real-time Disaster Intelligence · Team Tech Yantra</p>
+  </div>
+</div>
+
+<!-- ==================== MAIN WEBSITE ==================== -->
+<div id="mainApp" class="page-screen">
+
+  <!-- ALERT BANNER -->
+  <div id="alertBanner" class="alert-banner hidden">
+    <div class="alert-inner">
+      <span class="blink-dot"></span>
+      <span id="alertText">⚠️ EARLY WARNING: Earthquake detected 80km away. ETA: 45 minutes. Move to open areas!</span>
+      <button onclick="closeAlert()">✕</button>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <span>🛡️</span>
+      <span class="logo-text">RescueMesh <span class="ai-text">AI</span></span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" onclick="showSection('homeScreen')"><i class="fas fa-home"></i> Home</a>
+      <a href="#" onclick="showSection('alertScreen')"><i class="fas fa-bell"></i> Alerts</a>
+      <a href="#" onclick="showSection('disasterScreen')"><i class="fas fa-exclamation-triangle"></i> Disasters</a>
+      <a href="#" onclick="showSection('mapScreen')"><i class="fas fa-map"></i> Map</a>
+      <a href="#" onclick="showSection('volunteerScreen')"><i class="fas fa-hands-helping"></i> Volunteer</a>
+      <a href="#" onclick="showSection('contactScreen')"><i class="fas fa-phone-alt"></i> Emergency</a>
+      <a href="#" onclick="showSection('predictScreen')"><i class="fas fa-satellite"></i> Predictor</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-status"><span class="online-dot"></span> Live</div>
+      <button class="btn-sos-mini" onclick="triggerSOS()">SOS</button>
+      <div class="user-avatar" onclick="toggleUserMenu()">
+        <i class="fas fa-user-shield"></i>
+        <div id="userMenu" class="user-menu hidden">
+          <p id="userEmailDisplay">user@email.com</p>
+          <a href="#"><i class="fas fa-cog"></i> Settings</a>
+          <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      <button class="hamburger" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- ===== HOME SCREEN ===== -->
+  <section id="homeScreen" class="app-screen active">
+    <div class="screen-bg"></div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-item">
+        <i class="fas fa-wifi"></i>
+        <span id="connectedDevices">12</span> Devices
+      </div>
+      <div class="status-item">
+        <i class="fas fa-robot"></i> AI <span class="status-green">Active</span>
+      </div>
+      <div class="status-item">
+        <i class="fas fa-battery-three-quarters"></i>
+        <span id="batteryLevel">87%</span>
+      </div>
+      <div class="status-item">
+        <i class="fas fa-satellite-dish"></i> Signal <span class="status-green">Strong</span>
+      </div>
+      <div class="status-item volunteer-toggle-bar">
+        <i class="fas fa-hands-helping"></i> Volunteer
+        <label class="toggle-switch">
+          <input type="checkbox" id="volunteerToggle" onchange="toggleVolunteerMode()"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="home-hero">
+      <div class="hero-scanline"></div>
+      <div class="hero-text-block">
+        <div class="hero-badge-tag">🛡️ TEAM TECH YANTRA · GOOGLE DEVELOPER HACKATHON</div>
+        <h1 class="hero-big-title">RESCUE<span>MESH</span> AI</h1>
+        <p class="hero-sub">Real-Time Disaster Intelligence & Emergency Response Network</p>
+        <div class="hero-stats">
+          <div class="h-stat"><span>2.4K</span><p>Lives Saved</p></div>
+          <div class="h-stat"><span>18</span><p>Active Alerts</p></div>
+          <div class="h-stat"><span>340</span><p>Volunteers</p></div>
+          <div class="h-stat"><span>99.8%</span><p>Uptime</p></div>
+        </div>
+      </div>
+
+      <!-- BIG SOS BUTTON -->
+      <div class="sos-center">
+        <div class="sos-rings">
+          <div class="sos-ring r1"></div>
+          <div class="sos-ring r2"></div>
+          <div class="sos-ring r3"></div>
+        </div>
+        <button class="sos-btn" onclick="triggerSOS()">
+          <span class="sos-label">SOS</span>
+          <span class="sos-sub">PRESS FOR EMERGENCY</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- QUICK ACTION GRID -->
+    <div class="section-title">QUICK ACTIONS</div>
+    <div class="quick-grid">
+      <div class="quick-card" onclick="showSection('alertScreen')">
+        <div class="qc-icon red"><i class="fas fa-bell"></i></div>
+        <span>Send Alert</span>
+      </div>
+      <div class="quick-card" onclick="showSection('disasterScreen')">
+        <div class="qc-icon orange"><i class="fas fa-book-open"></i></div>
+        <span>Disaster Guide</span>
+      </div>
+      <div class="quick-card" onclick="showSection('mapScreen')">
+        <div class="qc-icon blue"><i class="fas fa-map-marked-alt"></i></div>
+        <span>Live Map</span>
+      </div>
+      <div class="quick-card" onclick="openChatbot()">
+        <div class="qc-icon green"><i class="fas fa-robot"></i></div>
+        <span>AI Assistant</span>
+      </div>
+      <div class="quick-card" onclick="showSection('volunteerScreen')">
+        <div class="qc-icon purple"><i class="fas fa-hands-helping"></i></div>
+        <span>Volunteer</span>
+      </div>
+      <div class="quick-card" onclick="showSection('predictScreen')">
+        <div class="qc-icon yellow"><i class="fas fa-satellite"></i></div>
+        <span>Predictor</span>
+      </div>
+      <div class="quick-card" onclick="showSection('contactScreen')">
+        <div class="qc-icon teal"><i class="fas fa-phone-alt"></i></div>
+        <span>Emergency No.</span>
+      </div>
+      <div class="quick-card" onclick="shareLocation()">
+        <div class="qc-icon pink"><i class="fas fa-map-pin"></i></div>
+        <span>Share Location</span>
+      </div>
+    </div>
+
+    <!-- LIVE ALERTS TICKER -->
+    <div class="live-ticker">
+      <span class="ticker-label">LIVE ALERTS</span>
+      <div class="ticker-content">
+        <span>⚠️ Flood warning issued for coastal areas of Maharashtra &nbsp;&nbsp;&nbsp; 🔥 Forest fire reported in Nashik district &nbsp;&nbsp;&nbsp; 🌊 Tsunami watch lifted for Andaman Islands &nbsp;&nbsp;&nbsp; 🌪️ Cyclone Biparjoy track updated — landfall expected in 6 hours &nbsp;&nbsp;&nbsp; 🏗️ Bridge structural alert: NH-48 Pune section under monitoring</span>
+      </div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="section-title">RECENT ACTIVITY</div>
+    <div class="activity-list">
+      <div class="activity-item red">
+        <div class="act-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="act-info">
+          <p>Earthquake M5.2 detected near Latur</p>
+          <span>2 minutes ago · Seismic Sensor Network</span>
+        </div>
+        <span class="act-badge danger">ACTIVE</span>
+      </div>
+      <div class="activity-item orange">
+        <div class="act-icon"><i class="fas fa-water"></i></div>
+        <div class="act-info">
+          <p>Flood alert upgraded to Level 3 in Kolhapur</p>
+          <span>15 minutes ago · Meteorological Dept</span>
+        </div>
+        <span class="act-badge warning">WARNING</span>
+      </div>
+      <div class="activity-item green">
+        <div class="act-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="act-info">
+          <p>Rescue team deployed — 47 survivors located</p>
+          <span>1 hour ago · NDRF Team 7</span>
+        </div>
+        <span class="act-badge safe">RESOLVED</span>
+      </div>
+      <div class="activity-item blue">
+        <div class="act-icon"><i class="fas fa-user-friends"></i></div>
+        <div class="act-info">
+          <p>28 new volunteers joined RescueMesh network</p>
+          <span>2 hours ago · Volunteer Portal</span>
+        </div>
+        <span class="act-badge info">INFO</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ALERT SCREEN ===== -->
+  <section id="alertScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-bell"></i> Emergency Alert Center</h2>
+    </div>
+
+    <div class="alert-grid">
+      <!-- SOS Panel -->
+      <div class="alert-card sos-panel">
+        <h3>🆘 SEND SOS SIGNAL</h3>
+        <div class="emergency-type-grid">
+          <button class="etype-btn active" onclick="selectEmergency(this,'earthquake')"><i class="fas fa-mountain"></i> Earthquake</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'flood')"><i class="fas fa-water"></i> Flood</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'fire')"><i class="fas fa-fire"></i> Fire</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'cyclone')"><i class="fas fa-wind"></i> Cyclone</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'accident')"><i class="fas fa-car-crash"></i> Accident</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'medical')"><i class="fas fa-heartbeat"></i> Medical</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'tsunami')"><i class="fas fa-wave-square"></i> Tsunami</button>
+          <button class="etype-btn" onclick="selectEmergency(this,'other')"><i class="fas fa-exclamation"></i> Other</button>
+        </div>
+        <textarea placeholder="Describe your situation... (optional)" class="sos-desc"></textarea>
+        <div class="sos-actions">
+          <button class="btn-location" onclick="shareLocation()"><i class="fas fa-map-pin"></i> Share Location</button>
+          <button class="btn-big-sos" onclick="sendSOS()"><i class="fas fa-satellite-dish"></i> BROADCAST SOS</button>
+        </div>
+        <div id="sosStatus" class="sos-status hidden">
+          <div class="broadcast-animation">
+            <div class="broadcast-ring"></div>
+            <div class="broadcast-ring b2"></div>
+            <i class="fas fa-satellite-dish broadcast-icon"></i>
+          </div>
+          <p>📡 SOS BROADCASTING... Signal sent to 12 nearby devices & emergency services</p>
+        </div>
+      </div>
+
+      <!-- Nearby Devices -->
+      <div class="alert-card">
+        <h3><i class="fas fa-wifi"></i> Nearby Devices</h3>
+        <div class="device-list">
+          <div class="device-item online">
+            <i class="fas fa-mobile-alt"></i>
+            <div><p>Rahul Sharma</p><span>120m away · Signal 98%</span></div>
+            <span class="d-status online">Online</span>
+          </div>
+          <div class="device-item online">
+            <i class="fas fa-tablet-alt"></i>
+            <div><p>Priya Patel</p><span>340m away · Signal 87%</span></div>
+            <span class="d-status online">Online</span>
+          </div>
+          <div class="device-item offline">
+            <i class="fas fa-mobile-alt"></i>
+            <div><p>Amit Kumar</p><span>890m away · Last seen 5m ago</span></div>
+            <span class="d-status offline">Offline</span>
+          </div>
+          <div class="device-item online">
+            <i class="fas fa-laptop"></i>
+            <div><p>NDRF Station 4</p><span>1.2km away · Signal 75%</span></div>
+            <span class="d-status online">Online</span>
+          </div>
+          <div class="device-item online">
+            <i class="fas fa-broadcast-tower"></i>
+            <div><p>Emergency Tower A1</p><span>2.1km away · Signal 100%</span></div>
+            <span class="d-status online">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Broadcast Status -->
+      <div class="alert-card">
+        <h3><i class="fas fa-broadcast-tower"></i> Alert Broadcast Status</h3>
+        <div class="broadcast-stats">
+          <div class="bs-item"><span>12</span><p>Devices Reached</p></div>
+          <div class="bs-item"><span>4</span><p>Authorities Notified</p></div>
+          <div class="bs-item"><span>89%</span><p>Network Coverage</p></div>
+          <div class="bs-item"><span>0.3s</span><p>Broadcast Latency</p></div>
+        </div>
+        <div class="signal-bars">
+          <div class="signal-bar" style="height:20%"></div>
+          <div class="signal-bar" style="height:40%"></div>
+          <div class="signal-bar" style="height:60%"></div>
+          <div class="signal-bar" style="height:80%"></div>
+          <div class="signal-bar active" style="height:100%"></div>
+        </div>
+      </div>
+
+      <!-- Location Panel -->
+      <div class="alert-card">
+        <h3><i class="fas fa-map-marker-alt"></i> Location Sharing</h3>
+        <div class="location-display">
+          <div class="loc-coords">
+            <p>📍 <span id="userLat">17.9689° N</span>, <span id="userLng">76.8190° E</span></p>
+            <p>📍 Nanded, Maharashtra, India</p>
+            <p>🏠 Accuracy: ±5 meters</p>
+          </div>
+          <button class="btn-share-loc" onclick="shareLocation()"><i class="fas fa-share-alt"></i> Share Now</button>
+          <div class="loc-status"><span class="blink-dot green"></span> Location tracking active</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DISASTER GUIDES SCREEN ===== -->
+  <section id="disasterScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-exclamation-triangle"></i> Disaster Response Guides</h2>
+    </div>
+
+    <div class="disaster-tabs">
+      <button class="dis-tab active" onclick="showDisaster(this,'earthquake')"><i class="fas fa-mountain"></i> Earthquake</button>
+      <button class="dis-tab" onclick="showDisaster(this,'flood')"><i class="fas fa-water"></i> Flood</button>
+      <button class="dis-tab" onclick="showDisaster(this,'fire')"><i class="fas fa-fire"></i> Fire</button>
+      <button class="dis-tab" onclick="showDisaster(this,'cyclone')"><i class="fas fa-wind"></i> Cyclone</button>
+      <button class="dis-tab" onclick="showDisaster(this,'tsunami')"><i class="fas fa-wave-square"></i> Tsunami</button>
+      <button class="dis-tab" onclick="showDisaster(this,'accident')"><i class="fas fa-car-crash"></i> Accident</button>
+    </div>
+
+    <div id="disasterContent" class="disaster-content">
+      <!-- Earthquake -->
+      <div id="dis-earthquake" class="dis-panel active">
+        <div class="dis-hero earthquake-bg">
+          <h2>🏔️ EARTHQUAKE RESPONSE</h2>
+          <p>Magnitude-based response protocol activated</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">BEFORE</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Identify safe spots: under tables, against interior walls</li>
+              <li><i class="fas fa-check"></i> Secure heavy furniture to walls</li>
+              <li><i class="fas fa-check"></i> Keep emergency kit ready (water, food, flashlight)</li>
+              <li><i class="fas fa-check"></i> Know your building's evacuation plan</li>
+              <li><i class="fas fa-check"></i> Save emergency contacts offline</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">DURING</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> DROP, COVER & HOLD ON immediately</li>
+              <li><i class="fas fa-exclamation"></i> Stay away from windows and glass</li>
+              <li><i class="fas fa-exclamation"></i> If outdoors, move away from buildings</li>
+              <li><i class="fas fa-exclamation"></i> Do NOT use elevators</li>
+              <li><i class="fas fa-exclamation"></i> If driving, pull over and stop</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Check for injuries, administer first aid</li>
+              <li><i class="fas fa-arrow-right"></i> Inspect for gas leaks — don't use flames</li>
+              <li><i class="fas fa-arrow-right"></i> Move to open areas away from structures</li>
+              <li><i class="fas fa-arrow-right"></i> Expect aftershocks — stay alert</li>
+              <li><i class="fas fa-arrow-right"></i> Report to RescueMesh AI via SOS</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flood -->
+      <div id="dis-flood" class="dis-panel">
+        <div class="dis-hero flood-bg">
+          <h2>🌊 FLOOD RESPONSE</h2>
+          <p>Flash flood emergency protocol</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">BEFORE</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Move valuables to higher floors</li>
+              <li><i class="fas fa-check"></i> Prepare waterproof emergency bag</li>
+              <li><i class="fas fa-check"></i> Know your nearest evacuation route</li>
+              <li><i class="fas fa-check"></i> Charge all devices, store offline maps</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">DURING</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> Move to highest point immediately</li>
+              <li><i class="fas fa-exclamation"></i> Never walk in moving floodwater</li>
+              <li><i class="fas fa-exclamation"></i> Avoid electrical equipment</li>
+              <li><i class="fas fa-exclamation"></i> Signal for help from rooftop</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Don't return until authorities clear</li>
+              <li><i class="fas fa-arrow-right"></i> Avoid floodwater — it may be contaminated</li>
+              <li><i class="fas fa-arrow-right"></i> Document damage for insurance</li>
+              <li><i class="fas fa-arrow-right"></i> Disinfect everything water touched</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fire -->
+      <div id="dis-fire" class="dis-panel">
+        <div class="dis-hero fire-bg">
+          <h2>🔥 FIRE RESPONSE</h2>
+          <p>Structure & wildfire emergency protocol</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">BEFORE</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Install smoke detectors on every floor</li>
+              <li><i class="fas fa-check"></i> Keep fire extinguisher accessible</li>
+              <li><i class="fas fa-check"></i> Plan & practice escape routes</li>
+              <li><i class="fas fa-check"></i> Never overload electrical outlets</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">DURING</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> Activate fire alarm immediately</li>
+              <li><i class="fas fa-exclamation"></i> Stay low — smoke rises</li>
+              <li><i class="fas fa-exclamation"></i> Close doors to slow fire spread</li>
+              <li><i class="fas fa-exclamation"></i> NEVER use elevator — use stairs</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Do NOT re-enter building</li>
+              <li><i class="fas fa-arrow-right"></i> Seek medical attention for burns/smoke</li>
+              <li><i class="fas fa-arrow-right"></i> Report to fire authorities</li>
+              <li><i class="fas fa-arrow-right"></i> Contact insurance immediately</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cyclone -->
+      <div id="dis-cyclone" class="dis-panel">
+        <div class="dis-hero cyclone-bg">
+          <h2>🌪️ CYCLONE RESPONSE</h2>
+          <p>Severe weather emergency protocol</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">BEFORE</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Board up windows and doors</li>
+              <li><i class="fas fa-check"></i> Stock 3-day water & food supply</li>
+              <li><i class="fas fa-check"></i> Charge all communication devices</li>
+              <li><i class="fas fa-check"></i> Identify nearest cyclone shelter</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">DURING</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> Stay in the strongest room of house</li>
+              <li><i class="fas fa-exclamation"></i> Do NOT go out during eye of storm</li>
+              <li><i class="fas fa-exclamation"></i> Stay away from windows</li>
+              <li><i class="fas fa-exclamation"></i> Monitor RescueMesh AI for updates</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Wait for official all-clear signal</li>
+              <li><i class="fas fa-arrow-right"></i> Watch for downed power lines</li>
+              <li><i class="fas fa-arrow-right"></i> Avoid floodwaters from storm surge</li>
+              <li><i class="fas fa-arrow-right"></i> Help neighbors — report via RescueMesh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tsunami -->
+      <div id="dis-tsunami" class="dis-panel">
+        <div class="dis-hero tsunami-bg">
+          <h2>🌊 TSUNAMI RESPONSE</h2>
+          <p>Coastal megawave emergency protocol</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">BEFORE</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Know the tsunami warning signs</li>
+              <li><i class="fas fa-check"></i> Identify high ground evacuation routes</li>
+              <li><i class="fas fa-check"></i> Keep emergency kit ready</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">DURING</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> Move IMMEDIATELY to high ground</li>
+              <li><i class="fas fa-exclamation"></i> Do NOT wait for official warning</li>
+              <li><i class="fas fa-exclamation"></i> Go inland as far as possible</li>
+              <li><i class="fas fa-exclamation"></i> Never go to shore to watch waves</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Wait for official all-clear</li>
+              <li><i class="fas fa-arrow-right"></i> Multiple waves may follow</li>
+              <li><i class="fas fa-arrow-right"></i> Avoid damaged buildings</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accident -->
+      <div id="dis-accident" class="dis-panel">
+        <div class="dis-hero accident-bg">
+          <h2>🚗 ACCIDENT RESPONSE</h2>
+          <p>Road & industrial accident protocol</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card before">
+            <div class="step-phase">ASSESS</div>
+            <ul>
+              <li><i class="fas fa-check"></i> Ensure your own safety first</li>
+              <li><i class="fas fa-check"></i> Turn on hazard lights</li>
+              <li><i class="fas fa-check"></i> Call 112 emergency immediately</li>
+            </ul>
+          </div>
+          <div class="step-card during">
+            <div class="step-phase">RESPOND</div>
+            <ul>
+              <li><i class="fas fa-exclamation"></i> Do NOT move injured persons (spinal risk)</li>
+              <li><i class="fas fa-exclamation"></i> Control bleeding with direct pressure</li>
+              <li><i class="fas fa-exclamation"></i> Check for breathing & pulse</li>
+              <li><i class="fas fa-exclamation"></i> Keep victim warm & calm</li>
+            </ul>
+          </div>
+          <div class="step-card after">
+            <div class="step-phase">AFTER</div>
+            <ul>
+              <li><i class="fas fa-arrow-right"></i> Document the scene safely</li>
+              <li><i class="fas fa-arrow-right"></i> Exchange information with parties</li>
+              <li><i class="fas fa-arrow-right"></i> Report to RescueMesh AI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MAP SCREEN ===== -->
+  <section id="mapScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-map-marked-alt"></i> Live Disaster Map</h2>
+    </div>
+    <div class="map-container">
+      <div class="map-legend">
+        <div class="legend-item"><span class="leg-dot red"></span> Active Disaster</div>
+        <div class="legend-item"><span class="leg-dot orange"></span> Warning Zone</div>
+        <div class="legend-item"><span class="leg-dot green"></span> Safe Zone</div>
+        <div class="legend-item"><span class="leg-dot blue"></span> Rescue Team</div>
+        <div class="legend-item"><span class="leg-dot purple"></span> Shelter</div>
+      </div>
+      <div class="map-fake">
+        <div class="map-grid-overlay"></div>
+        <div class="map-label">🗺️ INDIA — LIVE DISASTER MONITORING</div>
+        <!-- Fake map pins -->
+        <div class="map-pin red" style="top:55%;left:30%" title="Earthquake - Latur"><i class="fas fa-mountain"></i></div>
+        <div class="map-pin orange" style="top:60%;left:35%" title="Flood Warning - Kolhapur"><i class="fas fa-water"></i></div>
+        <div class="map-pin green" style="top:45%;left:40%" title="Safe Zone - Pune"><i class="fas fa-shield-alt"></i></div>
+        <div class="map-pin blue" style="top:50%;left:28%" title="NDRF Team"><i class="fas fa-user-shield"></i></div>
+        <div class="map-pin purple" style="top:52%;left:38%" title="Shelter - Solapur"><i class="fas fa-home"></i></div>
+        <div class="map-pin red" style="top:35%;left:55%" title="Cyclone Warning - Odisha"><i class="fas fa-wind"></i></div>
+        <div class="map-pin orange" style="top:25%;left:70%" title="Flood Alert - Assam"><i class="fas fa-water"></i></div>
+        <div class="you-are-here" style="top:57%;left:34%">📍 YOU</div>
+      </div>
+      <div class="map-controls">
+        <button onclick="showToast('🗺️ Map zoomed in')"><i class="fas fa-plus"></i></button>
+        <button onclick="showToast('🗺️ Map zoomed out')"><i class="fas fa-minus"></i></button>
+        <button onclick="shareLocation()"><i class="fas fa-crosshairs"></i></button>
+        <button onclick="showToast('🔄 Map refreshed')"><i class="fas fa-sync"></i></button>
+      </div>
+    </div>
+    <div class="map-incidents">
+      <h3>Nearby Incidents</h3>
+      <div class="incident-list">
+        <div class="incident-item"><span class="inc-icon earthquake">🏔️</span><div><p>Earthquake M5.2</p><span>12km SW · Latur</span></div><span class="inc-dist">12km</span></div>
+        <div class="incident-item"><span class="inc-icon flood">🌊</span><div><p>Flood Level 3</p><span>45km S · Kolhapur</span></div><span class="inc-dist">45km</span></div>
+        <div class="incident-item"><span class="inc-icon shelter">🏠</span><div><p>Emergency Shelter</p><span>3km E · Nanded Stadium</span></div><span class="inc-dist">3km</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VOLUNTEER SCREEN ===== -->
+  <section id="volunteerScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-hands-helping"></i> Volunteer Mode</h2>
+    </div>
+
+    <div class="volunteer-status-bar">
+      <div class="vol-stat">
+        <i class="fas fa-users"></i>
+        <span>340 Active Volunteers</span>
+      </div>
+      <div class="vol-stat">
+        <i class="fas fa-tasks"></i>
+        <span>18 Open Tasks</span>
+      </div>
+      <div class="vol-toggle-big">
+        Volunteer Mode:
+        <label class="toggle-switch big">
+          <input type="checkbox" id="volunteerToggle2" onchange="toggleVolunteerMode()"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="vol-role-section">
+      <h3>Select Your Volunteer Role</h3>
+      <div class="vol-role-grid">
+        <div class="vol-role-card active" onclick="selectVolRole(this,'Medical Aid')">
+          <i class="fas fa-heartbeat"></i>
+          <span>Medical Aid</span>
+        </div>
+        <div class="vol-role-card" onclick="selectVolRole(this,'Search & Rescue')">
+          <i class="fas fa-search"></i>
+          <span>Search & Rescue</span>
+        </div>
+        <div class="vol-role-card" onclick="selectVolRole(this,'Food & Water')">
+          <i class="fas fa-utensils"></i>
+          <span>Food & Water</span>
+        </div>
+        <div class="vol-role-card" onclick="selectVolRole(this,'Shelter Setup')">
+          <i class="fas fa-home"></i>
+          <span>Shelter Setup</span>
+        </div>
+        <div class="vol-role-card" onclick="selectVolRole(this,'Communication')">
+          <i class="fas fa-broadcast-tower"></i>
+          <span>Communication</span>
+        </div>
+        <div class="vol-role-card" onclick="selectVolRole(this,'Evacuation')">
+          <i class="fas fa-running"></i>
+          <span>Evacuation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rescue-requests">
+      <h3>🚨 Incoming Rescue Requests</h3>
+      <div class="rescue-card urgent">
+        <div class="rescue-header">
+          <span class="rescue-badge urgent">URGENT</span>
+          <span>2 min ago</span>
+        </div>
+        <p>Elderly woman trapped in collapsed building — 2nd floor, North wing</p>
+        <div class="rescue-info">
+          <span><i class="fas fa-map-pin"></i> 1.2km away · Latur Naka</span>
+          <span><i class="fas fa-user"></i> Rahul S. (victim)</span>
+        </div>
+        <div class="rescue-actions">
+          <button class="btn-accept" onclick="acceptRescue(this)"><i class="fas fa-check"></i> Accept</button>
+          <button class="btn-navigate" onclick="navigateToVictim()"><i class="fas fa-directions"></i> Navigate</button>
+          <button class="btn-decline"><i class="fas fa-times"></i> Decline</button>
+        </div>
+      </div>
+
+      <div class="rescue-card medium">
+        <div class="rescue-header">
+          <span class="rescue-badge medium">MEDIUM</span>
+          <span>8 min ago</span>
+        </div>
+        <p>Family of 4 needs evacuation assistance from flooded area</p>
+        <div class="rescue-info">
+          <span><i class="fas fa-map-pin"></i> 3.4km away · Vishnupuri</span>
+          <span><i class="fas fa-users"></i> 4 people</span>
+        </div>
+        <div class="rescue-actions">
+          <button class="btn-accept" onclick="acceptRescue(this)"><i class="fas fa-check"></i> Accept</button>
+          <button class="btn-navigate" onclick="navigateToVictim()"><i class="fas fa-directions"></i> Navigate</button>
+          <button class="btn-decline"><i class="fas fa-times"></i> Decline</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-assignment">
+      <h3>📋 Your Assigned Tasks</h3>
+      <div class="task-list">
+        <div class="task-item in-progress">
+          <div class="task-status-dot in-progress"></div>
+          <div class="task-info">
+            <p>Deliver medical supplies to Shelter B</p>
+            <span>Priority: High · ETA: 20 min</span>
+          </div>
+          <button class="btn-task-done" onclick="completeTask(this)">Done</button>
+        </div>
+        <div class="task-item pending">
+          <div class="task-status-dot pending"></div>
+          <div class="task-info">
+            <p>Assist injured at Station Road crossing</p>
+            <span>Priority: Medium · Awaiting</span>
+          </div>
+          <button class="btn-task-done" onclick="completeTask(this)">Done</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PREDICTOR SCREEN ===== -->
+  <section id="predictScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-satellite"></i> AI Disaster Predictor</h2>
+    </div>
+    <div class="predict-hero">
+      <div class="predict-radar">
+        <div class="radar-sweep"></div>
+        <div class="radar-ring r1"></div>
+        <div class="radar-ring r2"></div>
+        <div class="radar-ring r3"></div>
+        <div class="radar-dot d1"></div>
+        <div class="radar-dot d2"></div>
+        <div class="radar-dot d3"></div>
+        <div class="radar-center"><i class="fas fa-satellite-dish"></i></div>
+      </div>
+      <div class="predict-info">
+        <h3>AI PREDICTION ENGINE</h3>
+        <p>Analyzing seismic, meteorological & satellite data in real-time</p>
+        <div class="predict-last-update">Last updated: <span id="lastUpdate">Just now</span></div>
+      </div>
+    </div>
+
+    <div class="predictions-grid">
+      <div class="prediction-card high-risk">
+        <div class="pred-header">
+          <i class="fas fa-mountain"></i>
+          <span>Earthquake</span>
+          <span class="pred-risk high">HIGH RISK</span>
+        </div>
+        <div class="pred-bar-wrap">
+          <div class="pred-bar" style="width:78%"></div>
+          <span>78% probability</span>
+        </div>
+        <p>M4.5+ event predicted near Latur region within <strong>6-12 hours</strong></p>
+        <div class="pred-source">Source: Seismic Array · ISRO Data</div>
+        <div class="pred-eta">⏱️ ETA: 6–12 hours</div>
+      </div>
+
+      <div class="prediction-card medium-risk">
+        <div class="pred-header">
+          <i class="fas fa-water"></i>
+          <span>Flood</span>
+          <span class="pred-risk medium">MEDIUM RISK</span>
+        </div>
+        <div class="pred-bar-wrap">
+          <div class="pred-bar" style="width:52%"></div>
+          <span>52% probability</span>
+        </div>
+        <p>Heavy rainfall may cause river overflow in Godavari basin <strong>tomorrow</strong></p>
+        <div class="pred-source">Source: IMD · Satellite Imagery</div>
+        <div class="pred-eta">⏱️ ETA: 18–24 hours</div>
+      </div>
+
+      <div class="prediction-card low-risk">
+        <div class="pred-header">
+          <i class="fas fa-wind"></i>
+          <span>Cyclone</span>
+          <span class="pred-risk low">LOW RISK</span>
+        </div>
+        <div class="pred-bar-wrap">
+          <div class="pred-bar" style="width:22%"></div>
+          <span>22% probability</span>
+        </div>
+        <p>Depression forming in Bay of Bengal — monitoring in progress</p>
+        <div class="pred-source">Source: INCOIS · NHC Data</div>
+        <div class="pred-eta">⏱️ ETA: 72+ hours</div>
+      </div>
+
+      <div class="prediction-card medium-risk">
+        <div class="pred-header">
+          <i class="fas fa-fire"></i>
+          <span>Wildfire</span>
+          <span class="pred-risk medium">MEDIUM RISK</span>
+        </div>
+        <div class="pred-bar-wrap">
+          <div class="pred-bar" style="width:45%"></div>
+          <span>45% probability</span>
+        </div>
+        <p>Dry weather conditions increase wildfire risk in Nashik forests</p>
+        <div class="pred-source">Source: Forest Survey India · NASA FIRMS</div>
+        <div class="pred-eta">⏱️ ETA: 24–48 hours</div>
+      </div>
+    </div>
+
+    <div class="notification-settings">
+      <h3>🔔 Early Warning Notifications</h3>
+      <div class="notif-list">
+        <div class="notif-item">
+          <span><i class="fas fa-mountain"></i> Earthquake Alerts (1 hr advance)</span>
+          <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="notif-item">
+          <span><i class="fas fa-water"></i> Flood Warnings</span>
+          <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="notif-item">
+          <span><i class="fas fa-wave-square"></i> Tsunami Alerts</span>
+          <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="notif-item">
+          <span><i class="fas fa-wind"></i> Cyclone Alerts</span>
+          <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="notif-item">
+          <span><i class="fas fa-fire"></i> Fire Alerts</span>
+          <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="showToast('✅ Notification settings saved!')"><i class="fas fa-save"></i> Save Preferences</button>
+    </div>
+  </section>
+
+  <!-- ===== EMERGENCY CONTACTS SCREEN ===== -->
+  <section id="contactScreen" class="app-screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showSection('homeScreen')"><i class="fas fa-arrow-left"></i></button>
+      <h2><i class="fas fa-phone-alt"></i> Emergency Contacts</h2>
+    </div>
+    <div class="contacts-grid">
+      <a href="tel:112" class="contact-card red">
+        <div class="contact-icon"><i class="fas fa-phone-volume"></i></div>
+        <div class="contact-info"><h3>112</h3><p>National Emergency</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:101" class="contact-card orange">
+        <div class="contact-icon"><i class="fas fa-fire-extinguisher"></i></div>
+        <div class="contact-info"><h3>101</h3><p>Fire Brigade</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:102" class="contact-card green">
+        <div class="contact-icon"><i class="fas fa-ambulance"></i></div>
+        <div class="contact-info"><h3>102</h3><p>Ambulance</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:100" class="contact-card blue">
+        <div class="contact-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="contact-info"><h3>100</h3><p>Police</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:1078" class="contact-card purple">
+        <div class="contact-icon"><i class="fas fa-water"></i></div>
+        <div class="contact-info"><h3>1078</h3><p>Flood Relief</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:1070" class="contact-card teal">
+        <div class="contact-icon"><i class="fas fa-first-aid"></i></div>
+        <div class="contact-info"><h3>1070</h3><p>NDRF Disaster</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:1800111363" class="contact-card yellow">
+        <div class="contact-icon"><i class="fas fa-child"></i></div>
+        <div class="contact-info"><h3>1800-111-363</h3><p>Child Helpline</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+      <a href="tel:181" class="contact-card pink">
+        <div class="contact-icon"><i class="fas fa-female"></i></div>
+        <div class="contact-info"><h3>181</h3><p>Women Helpline</p></div>
+        <button class="call-btn"><i class="fas fa-phone"></i> Call</button>
+      </a>
+    </div>
+
+    <div class="local-contacts">
+      <h3>📍 Local Emergency Contacts — Nanded</h3>
+      <div class="local-list">
+        <div class="local-item"><i class="fas fa-hospital"></i><div><p>Dr. Shankarrao Chavan Govt Hospital</p><span>02462-234455</span></div><a href="tel:02462234455" class="call-mini"><i class="fas fa-phone"></i></a></div>
+        <div class="local-item"><i class="fas fa-shield-alt"></i><div><p>Nanded Police Control Room</p><span>02462-234100</span></div><a href="tel:02462234100" class="call-mini"><i class="fas fa-phone"></i></a></div>
+        <div class="local-item"><i class="fas fa-fire-extinguisher"></i><div><p>Nanded Fire Station</p><span>02462-222222</span></div><a href="tel:02462222222" class="call-mini"><i class="fas fa-phone"></i></a></div>
+        <div class="local-item"><i class="fas fa-water"></i><div><p>Nanded Flood Control Room</p><span>02462-245678</span></div><a href="tel:02462245678" class="call-mini"><i class="fas fa-phone"></i></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHATBOT BUTTON ===== -->
+  <button class="chatbot-fab" onclick="openChatbot()" title="AI Assistant">
+    <i class="fas fa-robot"></i>
+    <span class="fab-badge">AI</span>
+  </button>
+
+  <!-- ===== AI CHATBOT PANEL ===== -->
+  <div id="chatbotPanel" class="chatbot-panel hidden">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <div class="bot-avatar-mini"><i class="fas fa-robot"></i></div>
+        <div>
+          <p>RescueMesh AI Assistant</p>
+          <span><span class="online-dot"></span> Online · Powered by AI</span>
+        </div>
+      </div>
+      <button onclick="closeChatbot()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+        <div class="msg-bubble">
+          🛡️ Hello! I'm RescueMesh AI. Tell me your current emergency situation and I'll guide you with the best actions to take. What's happening around you?
+        </div>
+      </div>
+    </div>
+    <div class="chatbot-suggestions">
+      <button onclick="sendSuggestion('There is an earthquake happening right now!')">🏔️ Earthquake now!</button>
+      <button onclick="sendSuggestion('There is a flood and water is rising fast')">🌊 Flood rising</button>
+      <button onclick="sendSuggestion('There is fire in my building')">🔥 Building fire</button>
+      <button onclick="sendSuggestion('I need first aid instructions')">🏥 First aid</button>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" placeholder="Describe your situation..." onkeypress="if(event.key==='Enter')sendChat()"/>
+      <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- SOS CONFIRM MODAL -->
+  <div id="sosModal" class="modal hidden">
+    <div class="modal-box sos-confirm">
+      <div class="sos-modal-icon">🆘</div>
+      <h2>SEND SOS SIGNAL?</h2>
+      <p>This will broadcast your location and emergency signal to all nearby devices and emergency services.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('sosModal')">Cancel</button>
+        <button class="btn-confirm-sos" onclick="confirmSOS()">YES, SEND SOS</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end mainApp -->
+
+<script src="app.js"></script>
+</body>
+</html>
